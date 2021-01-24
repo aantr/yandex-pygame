@@ -11,6 +11,7 @@ from sprites.button import Button
 from sprites.dollars import Dollars
 from sprites.sprite import Group
 from states.game_state import GameState
+from states.reset_state import ResetState
 from states.shop_state import ShopState
 from states.state import State
 from utils.contact_listener import ContactListener
@@ -26,7 +27,9 @@ class MenuState(State):
                                   'Играть', self.sprite_group)
         self.button_shop = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 370),
                                   'Магазин', self.sprite_group)
-        self.button_exit = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 440),
+        self.button_reset = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 440),
+                                   'Сброс', self.sprite_group)
+        self.button_exit = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 510),
                                   'Выход', self.sprite_group)
 
         self.dollars = Dollars(self.res, self.sprite_group)
@@ -86,6 +89,8 @@ class MenuState(State):
             self.asm.push(GameState(self.asm, self.res))
         if self.button_shop.is_clicked():
             self.asm.push(ShopState(self.asm, self.res))
+        if self.button_reset.is_clicked():
+            self.asm.push(ResetState(self.asm, self.res))
         if self.button_exit.is_clicked():
             self.asm.pop()
 
