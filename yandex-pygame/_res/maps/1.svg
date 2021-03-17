@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FF0000;}
+	.st1{fill:#FFFF00;}
+	.st2{fill:#0000FF;}
+	.st3{fill:#00FF00;}
+	.st4{fill:none;stroke:#FF0000;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#7F7F7F;stroke-miterlimit:10;}
+</style>
+<rect x="64" y="132" class="st0" width="4" height="4"/>
+<rect x="136" y="160" class="st1" width="4" height="4"/>
+<rect x="144" y="164" class="st1" width="4" height="4"/>
+<rect x="152" y="160" class="st1" width="4" height="4"/>
+<rect x="212" y="164" class="st1" width="4" height="4"/>
+<rect x="220" y="168" class="st1" width="4" height="4"/>
+<rect x="228" y="164" class="st1" width="4" height="4"/>
+<rect x="112" y="136" class="st2" width="4" height="4"/>
+<rect x="232" y="196" class="st3" width="8" height="4"/>
+<path class="st4" d="M24,32"/>
+<line class="st4" x1="72" y1="140" x2="60" y2="128"/>
+<path class="st4" d="M44,116"/>
+<path class="st4" d="M64,120"/>
+<path class="st4" d="M72,32"/>
+<polyline class="st5" points="184,172 184,192 184,212 204,212 228,212 244,212 256,212 256,188 256,176 256,160 256,156 228,156 
+	212,156 200,140 184,124 184,108 168,92 152,92 136,108 136,124 136,140 152,140 168,156 152,156 136,156 120,140 120,124 120,108 
+	104,92 88,92 72,92 56,108 56,124 56,140 56,160 56,180 76,192 100,196 116,192 132,184 136,172 "/>
+<rect x="172" y="164" class="st2" width="4" height="4"/>
+<rect x="200" y="176" class="st2" width="4" height="4"/>
+<rect x="248" y="204" class="st2" width="4" height="4"/>
+<line class="st4" x1="104" y1="108" x2="112" y2="100"/>
+<path class="st2" d="M204,212"/>
+<line class="st4" x1="204" y1="212" x2="256" y2="164"/>
+<polyline class="st5" points="184,160 192,160 184,140 168,124 168,112 160,104 148,112 148,128 156,128 168,140 184,156 184,172 
+	168,172 152,172 136,172 120,156 104,140 104,124 104,108 88,108 72,124 72,140 "/>
+<rect x="208" y="188" width="4" height="4"/>
+<rect x="224" y="176" width="4" height="4"/>
+<rect x="244" y="164" width="4" height="4"/>
+<rect x="192" y="196" width="4" height="4"/>
+</svg>

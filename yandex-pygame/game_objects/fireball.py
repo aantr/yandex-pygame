@@ -31,15 +31,15 @@ class Fireball(GameObject):
         self.car = car
         self.callback = explosion_callback
 
-        self.impulse = 5
-        self.force = 15
+        self.impulse = 70
+        self.force = 250
         radius = 20
         shift = 40, 0
 
         shape = b2CircleShape()
         shape.radius = radius / PPM
         shape.pos = b2Vec2(shift) / PPM
-        fd = B2Factory.create_fixture(shape, 0.3, 0.1, 0.5)
+        fd = B2Factory.create_fixture(shape, 10, 0.1, 0.5)
         self.body = B2Factory.create_body(
             world, b2_dynamicBody, fd, b2_coords(pos) / PPM)
         self.body.userData = self

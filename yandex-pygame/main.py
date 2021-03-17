@@ -22,16 +22,19 @@ class Main:
                       self.res.image_car_green, self.res.image_police_car]
 
         # Игровой прогресс
-        self.completed_levels = 0
-        self.dollars = 0
-        self.saved_skins = [0] * len(self.skins)
-        self.saved_skins[0] = 1
-        self.current_skin = 0
+        self.init_save()
         self.get_save()
 
         self.asm = AppStateManager(self)
         self.asm.push_first(MenuState(self.asm, self.res))
         self.running = True
+
+    def init_save(self):
+        self.completed_levels = 0
+        self.dollars = 0
+        self.saved_skins = [0] * len(self.skins)
+        self.saved_skins[0] = 1
+        self.current_skin = 0
 
     def get_save(self):
         try:
@@ -44,15 +47,18 @@ class Main:
                 *saved_skins = fields
                 for i in range(len(self.saved_skins)):
                     self.saved_skins[i] = saved_skins[i]
-        except Exception as e:
-            self.write_save()
-            self.get_save()
+        except FileNotFoundError as e:
+            self.reset_save()
 
     def write_save(self):
         with open('save.bin', 'bw') as f:
             fields = self.completed_levels, self.dollars, self.current_skin, *self.saved_skins
             for i in fields:
                 f.write(i.to_bytes(10, 'big') + b'\n')
+
+    def reset_save(self):
+        self.init_save()
+        self.write_save()
 
     def update(self):
         events = pygame.event.get()
