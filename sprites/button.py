@@ -67,9 +67,10 @@ class Button(Sprite):
                     self.hover = False
                     self._connected()
             elif i.type == pygame.MOUSEBUTTONDOWN:
-                self.mouse_down = True
-                if self.init_rect.collidepoint(i.pos):
-                    self.pressed = True
+                if i.button == pygame.BUTTON_LEFT:
+                    self.mouse_down = True
+                    if self.init_rect.collidepoint(i.pos):
+                        self.pressed = True
 
             elif i.type == pygame.MOUSEMOTION:
                 if self.init_rect.collidepoint(i.pos):

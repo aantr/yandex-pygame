@@ -42,7 +42,8 @@ class MenuState(State):
         self.background_group = Group()
         self.spawn_random_car()
         self.spawn_timer = 0
-        self.spawn_timeout = 1
+        self.spawn_timeout = 1.5
+        self.spawn_counter = 0
 
     def spawn_random_car(self):
         r = random.randint(0, 1)
@@ -65,6 +66,11 @@ class MenuState(State):
             self.spawn_random_car()
         self.world.Step(dt, 6, 2)
         self.background_group.update(dt, events)
+
+        if self.spawn_counter:
+            self.spawn_counter -= 1
+            self.spawn_random_car()
+
         for i in self.background_group:
             if type(i) == PlayerCar:
                 i.energy -= dt * 0.3
@@ -80,7 +86,7 @@ class MenuState(State):
                                               self.background_group)
             if i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_SPACE:
-                    self.spawn_random_car()
+                    self.spawn_counter += 5
 
         if self.button_play.is_clicked():
             self.asm.push(GameState(self.asm, self.res))
@@ -98,3 +104,8 @@ class MenuState(State):
         self.sprite_group.draw(sc)
         render = self.res.font36.render(f'Уровень: {self.asm.main.completed_levels + 1}', True, (0, 0, 0))
         sc.blit(render, (20, 80))
+
+        render = self.res.font36.render(f'Не трогай Space!', True, (0, 0, 0))
+        sc.blit(render, (WIDTH - render.get_width() - 10, HEIGHT - render.get_height() - 10))
+        render = self.res.font36.render(f'Не нажимай ПКМ!', True, (0, 0, 0))
+        sc.blit(render, (10, HEIGHT - render.get_height() - 10))
