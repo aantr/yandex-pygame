@@ -49,14 +49,16 @@ class AppStateManager:
 
     def _push(self, state):
         self.states.append(state)
+        pygame.mixer.music.fadeout(1000)
         state.load()
 
     def _pop(self):
         state = self.states.pop()
         state.dispose()
         if gc.get_referrers(state):
-            print(StateError(f'State "{type(state)}" is not '
+            print(StateError(f'Warning: State "{type(state)}" is not '
                              f'disposed\nReferrers: {gc.get_referrers(state)}'))
+        new_state = self.states[-1].reset()
 
     def _set(self, state):
         self._pop()

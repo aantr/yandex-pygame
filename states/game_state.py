@@ -15,6 +15,7 @@ from game_objects.wall.revolving_wall import RevolvingWall
 from game_objects.player_car.player_car import PlayerCar
 from game_objects.ground import Ground
 from game_objects.wall.wall import Wall
+from sound_manager import SoundManager
 
 from sprites.button import Button
 from sprites.camera import Camera
@@ -39,15 +40,15 @@ class GameState(State, Framework):
     def __init__(self, asm, res):
         super().__init__(asm, res)
 
-        self.levels = Level.levels
-        self.level = self.levels[self.asm.main.completed_levels]
-
         if self.BOX2D_DEBUG:
             Framework.__init__(self)
             self.load()
             self.run()
 
     def load(self):
+        self.levels = Level.levels
+        self.level = self.levels[self.asm.main.completed_levels]
+
         if not self.BOX2D_DEBUG:
             self.world = b2World()
         self.world.gravity = 0, 0
@@ -75,8 +76,6 @@ class GameState(State, Framework):
         self.turret = Group()
         self.car = None
 
-        self.load_map()
-
         # ############# Other sprites
         self.sprite_group = Group()
 
@@ -88,6 +87,14 @@ class GameState(State, Framework):
         self.dollars = Dollars(self.res, self.sprite_group)
 
         self.text = self.level[1]
+
+        self.sm = SoundManager(self.conversation, self.car, self.sprite_group)
+        self.load_map()
+        self.sm.player_car = self.car
+
+        pygame.mixer.music.load(self.res.music_bg_game)
+        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.play(-1, fade_ms=2000)
 
     def load_map(self):
         svg = svgelements.SVG.parse(self.level[0])
@@ -136,7 +143,7 @@ class GameState(State, Framework):
         angle = math.degrees(el.rotation)
         if color == '#ff0000':
             if not self.car:
-                self.car = PlayerCar(*self.obj_args, CarSkin(
+                self.car = PlayerCar(*self.obj_args, self.sm, CarSkin(
                     self.res, self.asm.main.skins[self.asm.main.current_skin]),
                                      center, angle, self.camera, self.camera_group)
                 self.camera.set_position(self.car.get_position())
@@ -190,8 +197,9 @@ class GameState(State, Framework):
                 self.asm.main.write_save()
                 self.conversation.show(['Esc - выход, Space - следующий уровень'],
                                        event_listener=self.end_event_listener)
-            self.conversation.show(['Esc - выход, Space - начать заново'],
-                                   event_listener=self.end_event_listener)
+            else:
+                self.conversation.show(['Esc - выход, Space - начать заново'],
+                                       event_listener=self.end_event_listener)
 
         ###############
 
@@ -234,6 +242,10 @@ class GameState(State, Framework):
             self.conversation.show(['Вы победили'], lambda: self.__setattr__('is_over', True))
 
         if not self.is_over and not self.car.energy and not self.conversation.is_showing:
+            pygame.mixer.music.load(self.res.sound_lose)
+            pygame.mixer.music.set_volume(1)
+            pygame.mixer.music.play()
+
             self.conversation.show(['Вы потеряли энергию, игра окончена'],
                                    lambda: self.__setattr__('is_over', True))
             self.car.break_down()

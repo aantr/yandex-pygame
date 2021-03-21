@@ -9,6 +9,7 @@ from states.game_state import GameState
 
 class Main:
     def __init__(self):
+        pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
         pygame.mouse.set_system_cursor(SYSTEM_CURSOR_ARROW)
         self.screen: pygame.Surface = pygame.display.set_mode(

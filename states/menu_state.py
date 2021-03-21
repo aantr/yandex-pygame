@@ -7,7 +7,9 @@ from game_objects.explosion import Explosion
 from game_objects.player_car.player_car import PlayerCar
 from game_objects.player_car.skin import CarSkin
 from game_objects.tire import C_UP
+from sound_manager import SoundManager
 from sprites.button import Button
+from sprites.conversation import Conversation
 from sprites.dollars import Dollars
 from sprites.sprite import Group
 from states.game_state import GameState
@@ -30,6 +32,8 @@ class MenuState(State):
                                   'Выход', self.sprite_group)
 
         self.dollars = Dollars(self.res, self.sprite_group)
+        self.sm = SoundManager(None, None)
+        self.set_bg_music()
 
         # Задний фон для меню
         self.world = b2World()
@@ -45,9 +49,17 @@ class MenuState(State):
         self.spawn_timeout = 1.5
         self.spawn_counter = 0
 
+    def reset(self):
+        self.set_bg_music()
+
+    def set_bg_music(self):
+        pygame.mixer.music.load(self.res.music_bg_menu)
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1, fade_ms=2000)
+
     def spawn_random_car(self):
         r = random.randint(0, 1)
-        car = PlayerCar(*self.obj_args, CarSkin(
+        car = PlayerCar(*self.obj_args, self.sm, CarSkin(
             self.res, self.asm.main.skins[self.asm.main.current_skin]),
                         (random.randint(100, WIDTH - 100), r * HEIGHT + (r * 2 - 1) * 100),
                         random.randint(-20, 20) + 180 * (r - 1), None, self.background_group)

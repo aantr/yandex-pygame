@@ -54,7 +54,7 @@ class Police(Car):
         self.is_chasing = False
         self.detect_timeout = 20
 
-        self.hits = 0
+        self.hits = set()
 
     def set_chasing(self, car):
         self.way = [car.get_position()]
@@ -202,6 +202,6 @@ class Police(Car):
     def on_explosion(self, obj_from, power):
         if not self.is_broken and type(obj_from) == FireballExplosion:
             if power > 65:
-                self.hits += 1
-                if self.hits >= 3:
+                self.hits.add(obj_from)
+                if len(self.hits) >= 3:
                     self.break_down()

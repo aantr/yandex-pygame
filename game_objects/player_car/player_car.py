@@ -14,18 +14,21 @@ from game_objects.player_car.tire_particle import TireParticle
 from game_objects.police import Police
 from game_objects.tire import Tire, C_LEFT, C_RIGHT, C_UP, C_DOWN
 from game_objects.wall.base_wall import BaseWall
+from sound_manager import SoundManager
 from utils.utils import b2_coords, get_data
 from utils.utils import bound
 
 
 class PlayerCar(Car):
-    def __init__(self, world, cl, res: Resources, skin, pos, angle, camera,
+    def __init__(self, world, cl, res: Resources, sm: SoundManager,
+                 skin, pos, angle, camera,
                  game_object_group, *groups):
 
         super().__init__(world, cl, res, skin, pos, angle,
                          game_object_group, *groups)
 
         self.res = res
+        self.sm = sm
         self.camera = camera
 
         max_forward_speed = 25
@@ -50,7 +53,7 @@ class PlayerCar(Car):
         self.timeout_coeff = 3
         self.min_lateral_v_drifting = 100
         self.drifting_timer = 0
-        self.drifting_timeout = 1
+        self.drifting_timeout = 0.65
         self.multiply_drifting = 0
         self.is_on_police_chase = False
 
@@ -87,6 +90,12 @@ class PlayerCar(Car):
         if self.is_broken:
             return
 
+        if self.get_velocity().length > 30 and \
+                self.get_up_down_control() == C_UP:
+            self.sm.set_playing(self.res.sound_drive, fade_ms=1000)
+        else:
+            self.sm.stop_playing(self.res.sound_drive, fade_ms=1000)
+
         # Timers update
         self.drifting_timer = bound(self.drifting_timer, 0, self.drifting_timeout)
         if self.drifting_timer >= self.drifting_timeout:
@@ -98,18 +107,24 @@ class PlayerCar(Car):
         self.particles_timer = bound(self.particles_timer, 0, self.particles_timeout)
         if self.particles_timer >= self.particles_timeout:
             self.particles_timer = 0
+            lateral_v = 0
             for tire in self.tires[2:]:
                 lateral_v = tire.get_lateral_velocity().length * PPM
                 if lateral_v > self.min_lateral_v_drifting:
                     if self.draw_particles:
                         self.spawn_particle(tire)
                         self.particles_timeout = self.timeout_coeff / lateral_v
-                    if self.get_up_down_control() != C_DOWN:
-                        self.drifting_timer += dt
                 else:
                     self.particles_timeout = self.default_particles_timeout
                     self.drifting_timer = 0
                     self.multiply_drifting = 0
+
+            if lateral_v > self.min_lateral_v_drifting:
+                if self.get_up_down_control() != C_DOWN:
+                    self.sm.set_playing(self.res.sound_drift, fade_ms=1000)
+                    self.drifting_timer += dt
+            else:
+                self.sm.stop_playing(self.res.sound_drift, fade_ms=1000)
 
         self.energy = bound(self.energy, 0, 1)
         if self.is_bank_loot:
@@ -125,12 +140,15 @@ class PlayerCar(Car):
         self.is_on_police_chase = value
 
     def spawn_fireball(self, vector):
-        if self.waste_energy(0.1):
+        if self.waste_energy(0.03):
             fb = Fireball(self.world, self.cl, self.res,
                           self, vector, self.fireball_callback, self.game_object_group)
 
+            self.sm.play(self.res.sound_lazer)
+
     def fireball_callback(self):
         self.camera.shake(0.5, 60)
+        self.sm.play(self.res.sound_boom)
 
     def spawn_bomb(self):
         if self.waste_energy(0.1):
@@ -139,6 +157,7 @@ class PlayerCar(Car):
 
     def bomb_explosion_callback(self):
         self.camera.shake(0.6, 90)
+        self.sm.play(self.res.sound_boom)
 
     def teleport(self, distance):
         teleport_shift = pygame.Vector2(0, -distance).rotate(-self.get_angle())
@@ -254,6 +273,10 @@ class PlayerCar(Car):
                     self.control_state |= C_RIGHT
                 elif i.key == pygame.K_w:
                     self.control_state |= C_UP
+
+                    if self.get_velocity().length < 30:
+                        self.sm.play(self.res.sound_start_car)
+
                 elif i.key == pygame.K_s:
                     self.control_state |= C_DOWN
             elif i.type == pygame.KEYUP:

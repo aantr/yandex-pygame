@@ -56,18 +56,32 @@ class Resources:
         self.font16 = self.load_font(16)
         self.font14 = self.load_font(14)
 
-        self.map_path = self.path('_res/maps/new1.svg')
+        self.sound_drift = self.load_sound('_res/sound/drift-car.wav')
+        self.sound_drive = self.load_sound('_res/sound/drive_car.wav')
+        self.sound_start_car = self.load_sound('_res/sound/start_car.wav', 0.3)
+
+        self.sound_boom = self.load_sound('_res/sound/boom.wav')
+        self.sound_lazer = self.load_sound('_res/sound/lazer.wav')
+        self.sound_lose = self.path('_res/sound/lose.wav')
+
+        self.music_bg_game = self.path('_res/sound/background_game.wav')
+        self.music_bg_menu = self.path('_res/sound/background_menu.wav')
+
+    def load_sound(self, relative_path, volume=None):
+        sound = pygame.mixer.Sound(self.path(relative_path))
+        if volume is not None:
+            sound.set_volume(volume)
+        return sound
 
     def load_font(self, size):
         return pygame.font.Font(self.path('_res/font/3454344.ttf'), size)
 
-    @staticmethod
-    def path(relative_path):
-        return os.path.join(os.getcwd(), relative_path)
-
-    @staticmethod
-    def load_image(relative_path, alpha=True):
-        path = os.path.join(os.getcwd(), relative_path)
+    def load_image(self, relative_path, alpha=True):
+        path = self.path(relative_path)
         if alpha:
             return pygame.image.load(path).convert_alpha()
         return pygame.image.load(path).convert()
+
+    @staticmethod
+    def path(relative_path):
+        return os.path.join(os.getcwd(), relative_path)
