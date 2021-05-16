@@ -22,7 +22,7 @@ class GameObject(Sprite):
             i.add(self, layer=self.layer)
 
         self.ignore_ray_casting = False
-        self.draw_shadow = True
+        self.draw_shadow = bool(DRAW_SHADOWS)
 
         # Box2D body collides
         if connects:

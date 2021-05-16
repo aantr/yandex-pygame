@@ -12,8 +12,7 @@ class Main:
         pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
         pygame.mouse.set_system_cursor(SYSTEM_CURSOR_ARROW)
-        self.screen: pygame.Surface = pygame.display.set_mode(
-            (WIDTH, HEIGHT))
+        self.screen: pygame.Surface = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
         # Скины
