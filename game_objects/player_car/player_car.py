@@ -60,6 +60,9 @@ class PlayerCar(Car):
         # Bank
         self.bank_timer = 0
         self.bank_timeout = 10
+        self.bank_timeout_timers = [3, 5, 7, 9]
+        self.bank_timeout_messages = ['30%...', '50%...', '70%...', '90%...']
+        self.bank_timeout_state = 0
         self.is_bank_loot = False
         self.looted = False
         self.dollars = 0
@@ -135,6 +138,10 @@ class PlayerCar(Car):
                 self.queue_lines.append('Банк ограблен :)')
                 self.queue_lines.append('+ 500 $')
                 self.queue_lines.append(f'Итог: {self.dollars} $')
+            if self.bank_timeout_state < len(self.bank_timeout_timers) and \
+                    self.bank_timer > self.bank_timeout_timers[self.bank_timeout_state]:
+                self.queue_lines.append(self.bank_timeout_messages[self.bank_timeout_state])
+                self.bank_timeout_state += 1
 
     def set_police_chase(self, value):
         self.is_on_police_chase = value
@@ -234,6 +241,7 @@ class PlayerCar(Car):
             if (data_a == self or data_b == self) and \
                     self.is_bank_loot and not self.looted:
                 self.is_bank_loot = False
+                self.bank_timeout_state = 0
                 self.bank_timer = 0
                 self.queue_lines.append('Вы вышли из зоны грабежа :(')
 
