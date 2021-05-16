@@ -264,7 +264,7 @@ class GameState(State, Framework):
         ...
 
     def render(self, screen: pygame.Surface):
-        screen.fill((220, 210, 219))
+        screen.fill((185, 185, 185))
 
         self.camera.draw(screen)
         self.sprite_group.draw(screen)
