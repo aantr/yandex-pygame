@@ -20,7 +20,7 @@ class Resources:
         self.image_wall = self.load_image('_res/images/wall.png')
         self.image_revolving_wall = self.load_image('_res/images/revolving_wall.png')
         self.image_breakable_wall = self.load_image('_res/images/breakable_wall.png')
-        self.image_loading = self.load_image('_res/images/loading.png')
+        self.image_loading = self.load_image('_res/images/loading.jpg')
         self.image_bomb = self.load_image('_res/images/bomb2.png')
         self.explosion_particles = [self.load_image(i) for i in [
             '_res/images/explosion1.png',

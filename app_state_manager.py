@@ -21,8 +21,10 @@ class AppStateManager:
         self.on_transition = False  # True when state end
         self.transition_func = None
 
-        self.black_rect = pygame.Surface((WIDTH, HEIGHT))
+        self.loading_rect = pygame.Surface((WIDTH, HEIGHT))
         self.loading_image = self.main.res.image_loading
+        self.loading_rect.blit(self.loading_image, (WIDTH/2-self.loading_image.get_width()/2,
+                                                    HEIGHT/2-self.loading_image.get_height()/2))
 
     def set(self, state):
         self.transition(self._set, state)
@@ -94,12 +96,8 @@ class AppStateManager:
 
     def render_loading_screen(self, sc):
         alpha = 255 - self.fade_transition / self.FADE_TIME * 255
-        self.black_rect.set_alpha(alpha)
-        sc.blit(self.black_rect, (0, 0))
-
-        self.loading_image.set_alpha(alpha)
-        sc.blit(self.loading_image, (WIDTH // 2 - self.loading_image.get_size()[0] // 2,
-                                     HEIGHT // 2 - self.loading_image.get_size()[1] // 2))
+        self.loading_rect.set_alpha(alpha)
+        sc.blit(self.loading_rect, (0, 0))
 
     @staticmethod
     def add_arguments(f, *args):

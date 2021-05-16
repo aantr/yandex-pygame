@@ -93,7 +93,7 @@ class GameState(State, Framework):
         self.sm.player_car = self.car
 
         pygame.mixer.music.load(self.res.music_bg_game)
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1, fade_ms=2000)
 
     def load_map(self):
