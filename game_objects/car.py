@@ -3,7 +3,7 @@ import math
 import pygame
 from Box2D import *
 
-from game_objects.explosion import Explosion
+from game_objects.fireball import FireballExplosion
 from game_objects.player_car.skin import CarSkin
 from game_objects.game_object import GameObject
 from utils.utils import b2_coords, paint_images
@@ -175,15 +175,15 @@ class Car(GameObject):
                 for i in self.tires:
                     particles = paint_images(
                         self.res.explosion_particles, lambda x: (0, 0, 0, x[3]))
-                    Explosion.spawn_particles(self.world, self.cl, self.res,
-                                              b2_coords(i.body.position) * PPM, particles, 3, 2,
-                                              self.game_object_group)
+                    FireballExplosion.explosion.spawn_particles(self.world, self.cl, self.res,
+                                                                b2_coords(i.body.position) * PPM, particles, 3, 2,
+                                                                self.game_object_group)
                     i.dispose()
                 particles = paint_images(
                     self.res.explosion_particles, lambda x: (*self.color_particles, x[3]))
-                Explosion.spawn_particles(self.world, self.cl, self.res,
-                                          b2_coords(self.body.position) * PPM, particles, 7, 10,
-                                          self.game_object_group)
+                FireballExplosion.explosion.spawn_particles(self.world, self.cl, self.res,
+                                                            b2_coords(self.body.position) * PPM, particles, 7, 10,
+                                                            self.game_object_group)
                 self.dispose()
             return
 

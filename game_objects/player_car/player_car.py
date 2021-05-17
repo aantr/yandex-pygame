@@ -133,6 +133,7 @@ class PlayerCar(Car):
         if self.is_bank_loot:
             self.bank_timer += dt
             if not self.looted and self.bank_timer > self.bank_timeout:
+                self.final_boom()
                 self.looted = True
                 self.dollars += 500
                 self.queue_lines.append('Банк ограблен :)')
@@ -146,12 +147,29 @@ class PlayerCar(Car):
     def set_police_chase(self, value):
         self.is_on_police_chase = value
 
-    def spawn_fireball(self, vector):
-        if self.waste_energy(0.03):
-            fb = Fireball(self.world, self.cl, self.res,
-                          self, vector, self.fireball_callback, self.game_object_group)
+    def final_boom(self):
+        power = 10 ** 4
+        radius = 1500
+        count_rays = 30
+        FireballExplosion.explosion.apply_impulses(
+            self.world, self.get_position(),
+            power, radius, count_rays, self)
+        self.camera.shake(0.5, 60)
+        count_fireballs = 10
+        direction = pygame.Vector2(1, 0)
+        rotate_angle = 360 / count_fireballs
+        for i in range(count_fireballs):
+            self.spawn_fireball(direction, damage_me=PlayerCar,
+                                waste_energy=False, play_sound=False)
+            direction = direction.rotate(rotate_angle)
 
-            self.sm.play(self.res.sound_lazer)
+    def spawn_fireball(self, vector, damage_me=True, waste_energy=True, play_sound=True):
+        if not waste_energy or self.waste_energy(0.03):
+            fb = Fireball(self.world, self.cl, self.res,
+                          self, vector, self.fireball_callback, self.game_object_group,
+                          damage_me=damage_me)
+            if play_sound:
+                self.sm.play(self.res.sound_lazer)
 
     def fireball_callback(self):
         self.camera.shake(0.5, 60)

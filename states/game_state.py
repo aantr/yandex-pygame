@@ -84,7 +84,7 @@ class GameState(State, Framework):
         self.conversation = Conversation(self.res, self.sprite_group)
         self.police_effect = PoliceEffect(self.sprite_group)
         self.energy_line = EnergyLine(self.res, self.sprite_group)
-        self.dollars = Dollars(self.res, self.sprite_group)
+        self.dollars = Dollars(self.res, self.sprite_group, level=True)
 
         self.text = self.level[1]
 

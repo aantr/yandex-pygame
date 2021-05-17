@@ -14,10 +14,9 @@ from utils.ray_cast_callback import RayCastCallback
 
 class Explosion:
     @staticmethod
-    def apply_impulses(world, pos, power, radius, count_rays, obj_from):
+    def apply_impulses(world, pos, power, radius, count_rays, obj_from, damage_me=True):
         rays = []
         direction = pygame.Vector2(1, 0)
-
         rotate_angle = 360 / count_rays
         for i in range(count_rays):
             start_point = b2_coords(pos) / PPM
@@ -36,6 +35,8 @@ class Explosion:
             impulse.Normalize()
             impulse = impulse * power / count_rays * max(last_report.fraction + 0.5, 1)
             body: b2Body = last_report.fixture.body
+            if damage_me is not True and isinstance(body.userData, damage_me):
+                continue
             body.ApplyLinearImpulse(impulse, body.GetWorldPoint((0, 0)), True)
             if isinstance(body.userData, GameObject):
                 exploded_objects[body.userData] += impulse.length

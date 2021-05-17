@@ -16,7 +16,7 @@ class Fireball(GameObject):
     layer = 1
 
     def __init__(self, world, cl, res: Resources, car, vector, explosion_callback,
-                 game_object_group, *groups):
+                 game_object_group, *groups, damage_me=True):
         super().__init__(world, cl, game_object_group, *groups)
 
         self.draw_shadow = False
@@ -30,6 +30,7 @@ class Fireball(GameObject):
         self.res = res
         self.car = car
         self.callback = explosion_callback
+        self.damage_me = damage_me
 
         self.impulse = 5
         self.force = 15
@@ -75,8 +76,9 @@ class Fireball(GameObject):
         FireballExplosion(self.world, self.cl, self.res,
                           b2_coords(self.body.GetWorldPoint(
                               self.body.fixtures[0].shape.pos)) * PPM,
-                          self.game_object_group)
-        self.callback()
+                          self.game_object_group, damage_me=self.damage_me)
+        if self.damage_me is True:
+            self.callback()
         self.dispose()
 
     def dispose(self):
@@ -86,8 +88,10 @@ class Fireball(GameObject):
 
 class FireballExplosion(GameObject):
     layer = 3
+    explosion = Explosion
 
-    def __init__(self, world, cl, res: Resources, pos, game_object_group, *groups):
+    def __init__(self, world, cl, res: Resources, pos,
+                 game_object_group, *groups, damage_me=True):
         super().__init__(world, cl, game_object_group, *groups)
 
         self.draw_shadow = False
@@ -101,7 +105,8 @@ class FireballExplosion(GameObject):
         power = 750
         radius = 150
         count_rays = 20
-        Explosion.apply_impulses(world, pos, power, radius, count_rays, self)
+        Explosion.apply_impulses(world, pos, power,
+                                 radius, count_rays, self, damage_me=damage_me)
 
     def update(self, dt: float, events):
         self.animation.update(dt)
