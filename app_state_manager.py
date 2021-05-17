@@ -60,7 +60,8 @@ class AppStateManager:
         if gc.get_referrers(state):
             print(StateError(f'Warning: State "{type(state)}" is not '
                              f'disposed\nReferrers: {gc.get_referrers(state)}'))
-        new_state = self.states[-1].reset()
+        if self.states:
+            new_state = self.states[-1].reset()
 
     def _set(self, state):
         self._pop()
