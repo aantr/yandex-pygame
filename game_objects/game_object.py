@@ -35,7 +35,7 @@ class GameObject(Sprite):
         self.init_shadow = pygame.Surface((0, 0))
         self.shadow = self.init_shadow.copy()
         self.shadow_shift = pygame.Vector2(10, 10)
-        self.shadow_color = 150, 150, 150, 255
+        self.shadow_color = 135, 135, 135, 255
 
     def update(self, dt: float, events):
         ...

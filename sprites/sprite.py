@@ -51,9 +51,11 @@ class Group(pygame.sprite.LayeredUpdates):
         self.render_sprites()
         super().draw(surface)
 
-    def render_sprites(self):
+    def render_sprites(self, cancel_render=None):
         for sprite in self.sprites():
             sprite: Sprite
+            if cancel_render and cancel_render(sprite):
+                continue
             sprite.render()
 
     def add(self, *sprites, layer=None) -> None:

@@ -5,6 +5,7 @@ import pygame
 from constants import *
 from game_objects.game_object import GameObject
 from sprites.sprite import Group, Sprite
+from utils.utils import b2_coords
 
 
 class Camera:
@@ -100,6 +101,8 @@ class Camera:
 
     def draw(self, surface):
         """The code was rewritten from the base pygame.sprite.Sprite class"""
+
+        cancel_rect = pygame.Rect(self.camera_shift.x, self.camera_shift.y, WIDTH, HEIGHT)
 
         # Call render function in GameSprite
         self.group.render_sprites()
