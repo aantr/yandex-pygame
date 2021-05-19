@@ -4,7 +4,6 @@ from app_state_manager import AppStateManager
 from resources import Resources
 from constants import *
 from states.menu_state import MenuState
-from states.game_state import GameState
 
 
 class Main:

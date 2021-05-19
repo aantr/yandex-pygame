@@ -6,7 +6,6 @@ import pygame
 class Resources:
     def __init__(self):
         self.image_button = self.load_image('_res/images/button.png')
-
         self.image_car_red = self.load_image('_res/images/car/car_red.png')
         self.image_car_green = self.load_image('_res/images/car/car_green.png')
         self.image_car_yellow = self.load_image('_res/images/car/car_yellow.png')
@@ -67,6 +66,8 @@ class Resources:
         self.music_bg_game = self.path('_res/sound/background_game.wav')
         self.music_bg_menu = self.path('_res/sound/background_menu.wav')
 
+        self.drift_map_path = self.path('_res/maps/drift.svg')
+
     def load_sound(self, relative_path, volume=None):
         sound = pygame.mixer.Sound(self.path(relative_path))
         if volume is not None:
@@ -84,4 +85,5 @@ class Resources:
 
     @staticmethod
     def path(relative_path):
-        return os.path.join(os.getcwd(), relative_path)
+        directory = os.path.split(__file__)[0]
+        return os.path.join(directory, relative_path)

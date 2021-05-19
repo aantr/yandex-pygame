@@ -46,9 +46,6 @@ class GameState(State, Framework):
             self.run()
 
     def load(self):
-        self.levels = Level.levels
-        self.level = self.levels[self.asm.main.completed_levels]
-
         if not self.BOX2D_DEBUG:
             self.world = b2World()
         self.world.gravity = 0, 0
@@ -56,11 +53,6 @@ class GameState(State, Framework):
         self.world.contactListener = self.contact_listener
         # Аргументы при создании игрового объекта
         self.obj_args = self.world, self.contact_listener, self.res
-
-        self.is_over = False
-        self.saved = False
-        self.over_timer = 0
-        self.over_timeout = 1
 
         # ############# Игровые объекты
         self.camera_group = Group()
@@ -79,25 +71,8 @@ class GameState(State, Framework):
         # ############# Other sprites
         self.sprite_group = Group()
 
-        self.button = Button(self.res, (WIDTH - 120, HEIGHT - 70), 'Меню', self.sprite_group)
-        self.minimap = Minimap(200, 200, self.sprite_group)
-        self.conversation = Conversation(self.res, self.sprite_group)
-        self.police_effect = PoliceEffect(self.sprite_group)
-        self.energy_line = EnergyLine(self.res, self.sprite_group)
-        self.dollars = Dollars(self.res, self.sprite_group, level=True)
-
-        self.text = self.level[1]
-
-        self.sm = SoundManager(self.conversation, self.car, self.sprite_group)
-        self.load_map()
-        self.sm.player_car = self.car
-
-        pygame.mixer.music.load(self.res.music_bg_game)
-        pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play(-1, fade_ms=2000)
-
-    def load_map(self):
-        svg = svgelements.SVG.parse(self.level[0])
+    def load_map(self, map_path):
+        svg = svgelements.SVG.parse(map_path)
         scale_map = 25
 
         for el in svg.elements():
@@ -171,44 +146,22 @@ class GameState(State, Framework):
             if event.key == pygame.K_ESCAPE:
                 self.asm.pop()
             elif event.key == pygame.K_BACKSPACE:
-                self.asm.set(GameState(self.asm, self.res))
+                self.asm.set(self.__class__(self.asm, self.res))
 
     def end_event_listener(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.asm.pop()
             if event.key == pygame.K_SPACE:
-                self.asm.set(GameState(self.asm, self.res))
+                self.asm.set(self.__class__(self.asm, self.res))
 
     def update(self, dt, events):
-        for i in events:
-            if i.type == pygame.KEYDOWN:
-                ...
-
-        if self.is_over:
-            self.over_timer += dt
-        if self.over_timer >= self.over_timeout and not self.saved:
-            self.saved = True
-            if self.car.looted:
-                self.asm.main.dollars += self.car.dollars
-                self.asm.main.completed_levels = min(
-                    self.asm.main.completed_levels + 1,
-                    len(self.levels) - 1)
-                self.asm.main.write_save()
-                self.conversation.show(['Esc - выход, Space - следующий уровень'],
-                                       event_listener=self.end_event_listener)
-            else:
-                self.conversation.show(['Esc - выход, Space - начать заново'],
-                                       event_listener=self.end_event_listener)
-
-        ###############
 
         self.sprite_group.update(dt, events)
 
         if self.button.is_clicked():
             self.conversation.show(['Esc - выход, Space - продолжить игру, Backspace - начать заново'],
                                    event_listener=self.pause_event_listener)
-        self.dollars.value = self.car.dollars
 
         dt *= self.conversation.get_pause_modifier()
 
@@ -219,7 +172,7 @@ class GameState(State, Framework):
         # Обновляем контроль не в зависимости от dt
         self.car.update_control(events, only_move=capture_input)
         if not dt:
-            return
+            return False
 
         self.world.Step(dt, 6, 2)
         self.camera.chase_sprite(self.car, dt, self.camera.get_camera_shift_car(self.car))
@@ -231,24 +184,11 @@ class GameState(State, Framework):
             i: Police
             i.detect_car(self.car)
         self.police_effect.set_enabled(is_chasing)
-        self.energy_line.set_energy(self.car.energy)
 
         if self.car.is_bank_loot:
             for i in self.polices:
                 if not i.is_chasing:
                     i.set_chasing(self.car)
-
-        if not self.is_over and self.car.looted and not self.conversation.is_showing:
-            self.conversation.show(['Вы победили'], lambda: self.__setattr__('is_over', True))
-
-        if not self.is_over and not self.car.energy and not self.conversation.is_showing:
-            pygame.mixer.music.load(self.res.sound_lose)
-            pygame.mixer.music.set_volume(1)
-            pygame.mixer.music.play()
-
-            self.conversation.show(['Вы потеряли энергию, игра окончена'],
-                                   lambda: self.__setattr__('is_over', True))
-            self.car.break_down()
 
         for i in self.barriers:
             i: ConversationBarrier
@@ -256,12 +196,6 @@ class GameState(State, Framework):
                 i.dispose()
                 self.conversation.show(self.text[0])
                 self.text = self.text[1:]
-
-        ###############
-
-        # print(f'--- {round(self.car.get_speed(), 1)} ---')
-        # print(f'--- {(*self.car.get_position(),)} ---')
-        ...
 
     def render(self, screen: pygame.Surface):
         screen.fill((185, 185, 185))

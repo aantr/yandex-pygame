@@ -12,7 +12,8 @@ from sprites.button import Button
 from sprites.conversation import Conversation
 from sprites.dollars import Dollars
 from sprites.sprite import Group
-from states.game_state import GameState
+from states.drift_state import DriftState
+from states.level_state import LevelState
 from states.shop_state import ShopState
 from states.state import State
 from utils.contact_listener import ContactListener
@@ -24,11 +25,13 @@ class MenuState(State):
         self.sprite_group = Group()
 
         self.label_font = self.res.font64
-        self.button_play = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 300),
+        self.button_play = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 240),
                                   'Играть', self.sprite_group)
-        self.button_shop = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 370),
+        self.button_drift = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 300),
+                                   'Дрифт', self.sprite_group)
+        self.button_shop = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 360),
                                   'Магазин', self.sprite_group)
-        self.button_exit = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 440),
+        self.button_exit = Button(self.res, ((WIDTH - self.res.image_button.get_width()) / 2, 420),
                                   'Выход', self.sprite_group)
 
         self.dollars = Dollars(self.res, self.sprite_group)
@@ -101,7 +104,9 @@ class MenuState(State):
                     self.spawn_counter += 5
 
         if self.button_play.is_clicked():
-            self.asm.push(GameState(self.asm, self.res))
+            self.asm.push(LevelState(self.asm, self.res))
+        if self.button_drift.is_clicked():
+            self.asm.push(DriftState(self.asm, self.res))
         if self.button_shop.is_clicked():
             self.asm.push(ShopState(self.asm, self.res))
         if self.button_exit.is_clicked():
@@ -112,7 +117,7 @@ class MenuState(State):
 
         self.background_group.draw(sc)
         render = self.label_font.render('Ограбление банка', True, (0, 0, 0))
-        sc.blit(render, ((WIDTH - render.get_width()) / 2, 100))
+        sc.blit(render, ((WIDTH - render.get_width()) / 2, 70))
         self.sprite_group.draw(sc)
         render = self.res.font36.render(f'Уровень: {self.asm.main.completed_levels + 1}', True, (0, 0, 0))
         sc.blit(render, (20, 80))

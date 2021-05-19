@@ -195,10 +195,11 @@ class PlayerCar(Car):
                                   tire.body.GetWorldPoint((0, 0)), True)
 
     def on_drift(self):
+        self.multiply_drifting += 1
+        self.queue_lines.append(f'Дрифт {self.multiply_drifting}Х!')
         if self.is_on_police_chase:
-            self.multiply_drifting += 1
             self.energy += self.drift_energy + 0.05 * self.multiply_drifting
-            self.queue_lines.append(f'Дрифт {self.multiply_drifting}Х!')
+            self.queue_lines.append(f'+ Энергия')
 
     def on_wall_collide(self):
         self.energy -= 0.05
@@ -224,7 +225,7 @@ class PlayerCar(Car):
 
     def on_energy_collect(self):
         self.energy += self.item_energy
-        self.queue_lines.append('Энерия')
+        self.queue_lines.append('+ Энерия')
 
     def waste_energy(self, energy):
         if energy >= self.energy:
