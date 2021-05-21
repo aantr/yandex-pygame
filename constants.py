@@ -11,7 +11,7 @@ DRAW_SHADOWS = 1
 PLAY_SOUNDS = 1
 
 # Frames per second
-FPS = 85
+FPS = 75
 
 # Pixels per box2d meter
 PPM = 32
