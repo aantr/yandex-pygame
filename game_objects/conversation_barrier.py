@@ -1,8 +1,6 @@
 import math
-
 import pygame
 from Box2D import *
-from Box2D.tests.test_polyshape import ContactListener
 
 from constants import *
 from game_objects.game_object import GameObject
@@ -10,6 +8,7 @@ from game_objects.player_car.player_car import PlayerCar
 from resources import Resources
 from sprites.sprite import Group
 from utils.b2_factory import B2Factory
+from utils.contact_listener import ContactListener
 from utils.utils import get_data, b2_coords
 
 
