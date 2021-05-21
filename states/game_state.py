@@ -15,38 +15,35 @@ from game_objects.wall.revolving_wall import RevolvingWall
 from game_objects.player_car.player_car import PlayerCar
 from game_objects.ground import Ground
 from game_objects.wall.wall import Wall
-from sound_manager import SoundManager
-
-from sprites.button import Button
 from sprites.camera import Camera
-from sprites.conversation import Conversation
-from sprites.dollars import Dollars
-from sprites.energy_line import EnergyLine
-from sprites.police_effect import PoliceEffect
-from sprites.minimap import Minimap
 from sprites.sprite import Group, Sprite
-from states.levels import Level
 
 from states.state import State
 from Box2D import *
-from Box2D.examples.framework import Framework
 from constants import *
 from utils.contact_listener import ContactListener
 
+try:
+    from Box2D.examples.framework import Framework
+except ModuleNotFoundError:
+    class Framework:
+        ...
+
+BOX2D_DEBUG = 0
+
 
 class GameState(State, Framework):
-    BOX2D_DEBUG = 0
 
     def __init__(self, asm, res):
         super().__init__(asm, res)
 
-        if self.BOX2D_DEBUG:
+        if BOX2D_DEBUG:
             Framework.__init__(self)
             self.load()
             self.run()
 
     def load(self):
-        if not self.BOX2D_DEBUG:
+        if not BOX2D_DEBUG:
             self.world = b2World()
         self.world.gravity = 0, 0
         self.contact_listener = ContactListener()
