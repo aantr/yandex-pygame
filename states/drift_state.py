@@ -23,10 +23,8 @@ class DriftState(GameState):
         self.sm = SoundManager(self.conversation, self.car, self.sprite_group)
         self.load_map(self.res.drift_map_path)
         self.sm.player_car = self.car
+        self.sm.set_background(self.res.music_bg_menu, 0.1)
 
-        pygame.mixer.music.load(self.res.music_bg_menu)
-        pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play(-1, fade_ms=2000)
 
     def update(self, dt, events):
         super().update(dt, events)

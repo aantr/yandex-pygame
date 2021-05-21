@@ -12,9 +12,9 @@ class SoundManager(Sprite):
         self.conversation = conversation
         self.player_car = player_car
         self.enabled = True
-
-        pygame.mixer.set_num_channels(20)
-        self.free_channels = [pygame.mixer.Channel(i) for i in range(20)]
+        if PLAY_SOUNDS:
+            pygame.mixer.set_num_channels(20)
+            self.free_channels = [pygame.mixer.Channel(i) for i in range(20)]
         self.playing_sounds = {}
 
     def get_enabled(self):
@@ -52,3 +52,10 @@ class SoundManager(Sprite):
             return
         if self.get_enabled():
             sound.play()
+
+    def set_background(self, path, volume):
+        if not PLAY_SOUNDS:
+            return
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.set_volume(volume)
+        pygame.mixer.music.play(-1, fade_ms=2000)

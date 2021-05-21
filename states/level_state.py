@@ -34,10 +34,7 @@ class LevelState(GameState):
         self.sm = SoundManager(self.conversation, self.car, self.sprite_group)
         self.load_map(self.level[0])
         self.sm.player_car = self.car
-
-        pygame.mixer.music.load(self.res.music_bg_game)
-        pygame.mixer.music.set_volume(0.1)
-        pygame.mixer.music.play(-1, fade_ms=2000)
+        self.sm.set_background(self.res.music_bg_game, 0.1)
 
     def update(self, dt, events):
         self.dollars.value = self.car.dollars
@@ -66,10 +63,7 @@ class LevelState(GameState):
             self.conversation.show(['Вы победили'], lambda: self.__setattr__('is_over', True))
 
         if not self.is_over and not self.car.energy and not self.conversation.is_showing:
-            pygame.mixer.music.load(self.res.sound_lose)
-            pygame.mixer.music.set_volume(1)
-            pygame.mixer.music.play()
-
+            self.sm.set_background(self.res.sound_lose, 1)
             self.conversation.show(['Вы потеряли энергию, игра окончена'],
                                    lambda: self.__setattr__('is_over', True))
             self.car.break_down()

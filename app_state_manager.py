@@ -51,7 +51,8 @@ class AppStateManager:
 
     def _push(self, state):
         self.states.append(state)
-        pygame.mixer.music.fadeout(1000)
+        if PLAY_SOUNDS:
+            pygame.mixer.music.fadeout(1000)
         state.load()
 
     def _pop(self):

@@ -8,7 +8,8 @@ from states.menu_state import MenuState
 
 class Main:
     def __init__(self):
-        pygame.mixer.init(44100, -16, 2, 512)
+        if PLAY_SOUNDS:
+            pygame.mixer.init(44100, -16, 2, 512)
         pygame.init()
         pygame.mouse.set_system_cursor(SYSTEM_CURSOR_ARROW)
         self.screen: pygame.Surface = pygame.display.set_mode(
@@ -16,7 +17,7 @@ class Main:
             pygame.DOUBLEBUF | pygame.HWSURFACE)
         self.clock = pygame.time.Clock()
 
-        self.res = Resources(play_sounds=PLAY_SOUNDS)
+        self.res = Resources()
         # Скины
         self.skins = [self.res.image_car_red, self.res.image_car_cyan,
                       self.res.image_car_yellow, self.res.image_car_purple,

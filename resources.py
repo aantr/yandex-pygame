@@ -2,11 +2,11 @@ import os
 
 import pygame
 
+from constants import PLAY_SOUNDS
+
 
 class Resources:
-    def __init__(self, play_sounds=True):
-        self.play_sounds = play_sounds
-
+    def __init__(self):
         self.image_button = self.load_image('_res/images/button.png')
         self.image_car_red = self.load_image('_res/images/car/car_red.png')
         self.image_car_green = self.load_image('_res/images/car/car_green.png')
@@ -71,7 +71,7 @@ class Resources:
         self.drift_map_path = self.path('_res/maps/drift.svg')
 
     def load_sound(self, relative_path, volume=None):
-        if not self.play_sounds:
+        if not PLAY_SOUNDS:
             return
         sound = pygame.mixer.Sound(self.path(relative_path))
         if volume is not None:
