@@ -8,7 +8,7 @@ DRAW_SHADOWS = 1
 # DRAW_SHADOWS = 0
 
 # Sounds
-PLAY_SOUNDS = 0
+PLAY_SOUNDS = 1
 
 # Frames per second
 FPS = 85
