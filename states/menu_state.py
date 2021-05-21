@@ -36,7 +36,7 @@ class MenuState(State):
 
         self.dollars = Dollars(self.res, self.sprite_group)
         self.sm = SoundManager(None, None)
-        self.set_bg_music()
+        self.sm.set_background(self.res.music_bg_menu, 0.3)
 
         # Задний фон для меню
         self.world = b2World()
@@ -53,12 +53,7 @@ class MenuState(State):
         self.spawn_counter = 0
 
     def reset(self):
-        self.set_bg_music()
-
-    def set_bg_music(self):
-        pygame.mixer.music.load(self.res.music_bg_menu)
-        pygame.mixer.music.set_volume(0.3)
-        pygame.mixer.music.play(-1, fade_ms=2000)
+        self.sm.set_background(self.res.music_bg_menu, 0.3)
 
     def spawn_random_car(self):
         r = random.randint(0, 1)
