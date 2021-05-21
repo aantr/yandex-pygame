@@ -7,6 +7,9 @@ WIDTH, HEIGHT = 1280, 720
 DRAW_SHADOWS = 1
 # DRAW_SHADOWS = 0
 
+# Sounds
+PLAY_SOUNDS = 0
+
 # Frames per second
 FPS = 85
 

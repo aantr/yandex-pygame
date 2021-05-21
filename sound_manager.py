@@ -1,5 +1,6 @@
 import pygame
 
+from constants import PLAY_SOUNDS
 from sprites.sprite import Sprite
 
 
@@ -27,6 +28,8 @@ class SoundManager(Sprite):
                 v.fadeout(500)
 
     def set_playing(self, sound: pygame.mixer.Sound, fade_ms=0):
+        if not PLAY_SOUNDS:
+            return
         if sound not in self.playing_sounds:
             self.playing_sounds[sound] = self.free_channels[0]
             self.free_channels = self.free_channels[1:]
@@ -34,6 +37,8 @@ class SoundManager(Sprite):
             sound.play(loops=-1, fade_ms=fade_ms)
 
     def stop_playing(self, sound: pygame.mixer.Sound, fade_ms=0):
+        if not PLAY_SOUNDS:
+            return
         if sound not in self.playing_sounds:
             return
         if self.playing_sounds[sound].get_busy():
@@ -43,5 +48,7 @@ class SoundManager(Sprite):
                 sound.stop()
 
     def play(self, sound: pygame.mixer.Sound):
+        if not PLAY_SOUNDS:
+            return
         if self.get_enabled():
             sound.play()
