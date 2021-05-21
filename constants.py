@@ -1,7 +1,6 @@
 # Screen size
 WIDTH, HEIGHT = 1280, 720
-# WIDTH, HEIGHT = 1080, 640
-# WIDTH, HEIGHT = 820, 640
+# WIDTH, HEIGHT = 1120, 640
 
 # Graphics
 DRAW_SHADOWS = 1
@@ -11,7 +10,11 @@ DRAW_SHADOWS = 1
 PLAY_SOUNDS = 1
 
 # Frames per second
-FPS = 75
+FPS = 65
+# FPS = 55 # minimum
+# FPS = 85 # For PRO
+# FPS = 100 # For NASA only :)
+
 
 # Pixels per box2d meter
 PPM = 32
