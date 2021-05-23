@@ -21,6 +21,11 @@
 2. Установите модули из файла requirements.txt (если не устанавливается box2d, попробуйте другую версию python (3.6.x 32bit))
 3. Клонируйте репозиторий
 4. Запустите файл main.py
+<pre><code>git clone https://github.com/aantr/yandex-pygame
+cd yandex-pygame
+pip install -r requirements.txt
+python main.py
+</code></pre>
 ## Box2D
 Для запуска игры необходимо установить модуль Box2D, находящийся в файле requirements.txt, но у меня иногда возникали траблы с установкой через pip. 
 Если у вас возникает ошибка при установке через pip, попробуйте установить python более поздней версии (например, Python 3.8.2 (стоит у меня) или Python 3.6.*), что помогло мне.
