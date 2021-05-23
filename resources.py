@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-from constants import PLAY_SOUNDS
+from configurations import PLAY_SOUNDS
 
 
 class Resources:

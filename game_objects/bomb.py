@@ -6,7 +6,7 @@ from game_objects.game_object import GameObject
 from resources import Resources
 from utils.utils import b2_coords, paint_images
 from utils.b2_factory import B2Factory
-from constants import *
+from configurations import *
 import random
 
 

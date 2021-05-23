@@ -1,6 +1,6 @@
 import pygame
 import math
-from constants import *
+from configurations import *
 from resources import Resources
 from sprites.sprite import Sprite
 from utils.utils import bound

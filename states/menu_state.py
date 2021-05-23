@@ -2,13 +2,14 @@ import random
 
 import pygame
 from Box2D import *
-from constants import *
+from configurations import *
 from game_objects.explosion import Explosion
 from game_objects.player_car.player_car import PlayerCar
 from game_objects.player_car.skin import CarSkin
 from game_objects.tire import C_UP
 from sound_manager import SoundManager
 from sprites.button import Button
+from sprites.camera import Camera
 from sprites.conversation import Conversation
 from sprites.dollars import Dollars
 from sprites.sprite import Group
@@ -51,6 +52,7 @@ class MenuState(State):
         self.spawn_timer = 0
         self.spawn_timeout = 1.5
         self.spawn_counter = 0
+        self.background_camera = Camera(self.background_group)
 
     def reset(self):
         self.sm.set_background(self.res.music_bg_menu, 0.3)
@@ -110,14 +112,14 @@ class MenuState(State):
     def render(self, sc: pygame.Surface):
         sc.fill((130, 130, 130))
 
-        self.background_group.draw(sc)
+        self.background_camera.draw(sc)
         render = self.label_font.render('Ограбление банка', True, (0, 0, 0))
         sc.blit(render, ((WIDTH - render.get_width()) / 2, 70))
         self.sprite_group.draw(sc)
         render = self.res.font36.render(f'Уровень: {self.asm.main.completed_levels + 1}', True, (0, 0, 0))
         sc.blit(render, (20, 80))
 
-        render = self.res.font36.render(f'Не трогай Space!', True, (0, 0, 0))
+        render = self.res.font20.render(f'Не трогай Space!', True, (0, 0, 0))
         sc.blit(render, (WIDTH - render.get_width() - 10, HEIGHT - render.get_height() - 10))
-        render = self.res.font36.render(f'Не нажимай ПКМ!', True, (0, 0, 0))
+        render = self.res.font20.render(f'Не нажимай ПКМ!', True, (0, 0, 0))
         sc.blit(render, (10, HEIGHT - render.get_height() - 10))

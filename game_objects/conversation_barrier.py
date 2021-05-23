@@ -2,7 +2,7 @@ import math
 import pygame
 from Box2D import *
 
-from constants import *
+from configurations import *
 from game_objects.game_object import GameObject
 from game_objects.player_car.player_car import PlayerCar
 from resources import Resources

@@ -1,7 +1,7 @@
 import pygame
 import gc
 
-from constants import *
+from configurations import *
 
 
 class StateError(Exception):

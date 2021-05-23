@@ -7,7 +7,7 @@ from game_objects.wall.base_wall import BaseWall
 from resources import Resources
 from utils.utils import b2_coords
 from utils.b2_factory import B2Factory
-from constants import *
+from configurations import *
 
 
 class RevolvingWall(BaseWall):

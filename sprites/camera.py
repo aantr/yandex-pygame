@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from constants import *
+from configurations import *
 from game_objects.game_object import GameObject
 from sprites.sprite import Group, Sprite
 from utils.utils import b2_coords
@@ -82,7 +82,7 @@ class Camera:
             self.camera_shift += pygame.Vector2(delta_x, delta_y)
 
     def draw_shadow(self, spr, surface_blit):
-        surface_blit(spr.shadow, spr.rect.move(
+        surface_blit(spr.shadow, spr.shadow_rect.move(
             spr.shadow_shift - self.camera_shift))
 
     def draw_sprite(self, spr, surface_blit, spritedict, dirty_append, init_rect):
@@ -101,8 +101,6 @@ class Camera:
 
     def draw(self, surface):
         """The code was rewritten from the base pygame.sprite.Sprite class"""
-
-        cancel_rect = pygame.Rect(self.camera_shift.x, self.camera_shift.y, WIDTH, HEIGHT)
 
         # Call render function in GameSprite
         self.group.render_sprites()

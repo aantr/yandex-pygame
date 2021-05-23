@@ -2,7 +2,7 @@ import pygame
 from pygame.constants import *
 from app_state_manager import AppStateManager
 from resources import Resources
-from constants import *
+from configurations import *
 from states.menu_state import MenuState
 
 
@@ -12,9 +12,7 @@ class Main:
             pygame.mixer.init(44100, -16, 2, 512)
         pygame.init()
         pygame.mouse.set_system_cursor(SYSTEM_CURSOR_ARROW)
-        self.screen: pygame.Surface = pygame.display.set_mode(
-            (WIDTH, HEIGHT),
-            pygame.DOUBLEBUF | pygame.HWSURFACE)
+        self.screen: pygame.Surface = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
         self.res = Resources()

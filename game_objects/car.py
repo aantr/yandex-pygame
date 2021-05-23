@@ -8,7 +8,7 @@ from game_objects.player_car.skin import CarSkin
 from game_objects.game_object import GameObject
 from utils.utils import b2_coords, paint_images
 from utils.b2_factory import B2Factory
-from constants import *
+from configurations import *
 from game_objects.ground import Ground
 from game_objects.tire import Tire, C_RIGHT, C_LEFT, C_UP, C_DOWN
 

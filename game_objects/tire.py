@@ -3,7 +3,7 @@ from Box2D import *
 from game_objects.game_object import GameObject
 from utils.utils import b2_coords
 from utils.b2_factory import B2Factory
-from constants import *
+from configurations import *
 
 # Tire control
 C_LEFT = 0x1
@@ -21,6 +21,7 @@ class Tire(GameObject):
                  max_drive_force, max_lateral_impulse,
                  angular_friction_impulse, linear_friction_impulse,
                  density, restitution, friction, game_object_group, *groups):
+        self.shadow_color = PLAYER_CAR_SHADOW_COLOR
         super().__init__(world, cl, game_object_group, *groups)
 
         size = 10, 24

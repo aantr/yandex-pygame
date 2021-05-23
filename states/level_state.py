@@ -1,6 +1,6 @@
 import pygame
 
-from constants import *
+from configurations import *
 from sound_manager import SoundManager
 from sprites.button import Button
 from sprites.conversation import Conversation

@@ -1,7 +1,7 @@
 import pygame
 from Box2D import *
 
-from constants import *
+from configurations import *
 from game_objects.bank import LootArea
 from game_objects.energy_item import EnergyItem
 from game_objects.turret.bullet import Bullet
@@ -24,6 +24,7 @@ class PlayerCar(Car):
                  skin, pos, angle, camera,
                  game_object_group, *groups):
 
+        self.shadow_color = PLAYER_CAR_SHADOW_COLOR
         super().__init__(world, cl, res, skin, pos, angle,
                          game_object_group, *groups)
 

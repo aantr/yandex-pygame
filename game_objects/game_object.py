@@ -1,10 +1,12 @@
 import math
 import pygame
 from Box2D import *
+from PIL import ImageFilter
+from PIL import Image
 
-from constants import *
+from configurations import *
 from sprites.sprite import Sprite, Group
-from utils.utils import b2_coords, paint_images
+from utils.utils import b2_coords, paint_images, image2pil, pil2image
 from utils.contact_listener import ContactListener
 
 
@@ -34,8 +36,11 @@ class GameObject(Sprite):
         # Shadow image
         self.init_shadow = pygame.Surface((0, 0))
         self.shadow = self.init_shadow.copy()
+        self.shadow_rect = self.rect.copy()
         self.shadow_shift = pygame.Vector2(10, 10)
-        self.shadow_color = 135, 135, 135, 255
+        # self.shadow_color = 135, 135, 135, 255
+        if not hasattr(self, 'shadow_color'):
+            self.shadow_color = SHADOWS_COLOR
 
     def update(self, dt: float, events):
         ...
@@ -82,7 +87,7 @@ class GameObject(Sprite):
 
         # Shadow image
         if self.draw_shadow:
-            _, rotated_im = self.rotate_image_center(
+            self.shadow_rect, rotated_im = self.rotate_image_center(
                 self.rect, angle, self.init_shadow)
             self.shadow = rotated_im
 
@@ -96,4 +101,12 @@ class GameObject(Sprite):
     def process_image_to_shadow(image: pygame.Surface, color):
         """Makes image black like shadow with alpha"""
         res = paint_images([image], lambda x: (*color[:3], color[3] * x[3] // 255))[0]
+        # Make blur
+        width = 20
+        pil_im = image2pil(res, )
+        new = Image.new('RGBA', (pil_im.width + 2 * width, pil_im.height + 2 * width),
+                        color=SECONDARY_SHADOWS_COLOR)
+        new.paste(pil_im, (width, width))
+        new = new.filter(eval(f'ImageFilter.{SHADOWS_FILTER}'))
+        res = pil2image(new)
         return res

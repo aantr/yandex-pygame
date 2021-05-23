@@ -1,5 +1,5 @@
 import pygame
-from constants import *
+from configurations import *
 from game_objects.car import Car
 from sprites.button import Button
 from sprites.dollars import Dollars

@@ -7,7 +7,7 @@ from game_objects.turret.bullet import Bullet
 from resources import Resources
 from utils.b2_factory import B2Factory
 from utils.utils import b2_coords
-from constants import *
+from configurations import *
 
 
 class Turret(GameObject):

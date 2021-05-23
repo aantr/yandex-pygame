@@ -9,7 +9,7 @@ from resources import Resources
 from sprites.animation import Animation
 from utils.utils import b2_coords, get_data
 from utils.b2_factory import B2Factory
-from constants import *
+from configurations import *
 
 
 class Fireball(GameObject):

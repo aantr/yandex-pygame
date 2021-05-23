@@ -20,7 +20,7 @@ from sprites.sprite import Group, Sprite
 
 from states.state import State
 from Box2D import *
-from constants import *
+from configurations import *
 from utils.contact_listener import ContactListener
 
 try:

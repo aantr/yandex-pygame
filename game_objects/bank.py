@@ -1,7 +1,7 @@
 import pygame
 from Box2D import *
 
-from constants import *
+from configurations import *
 from game_objects.game_object import GameObject
 from resources import Resources
 from sprites.sprite import Group

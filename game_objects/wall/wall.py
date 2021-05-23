@@ -16,9 +16,11 @@ class Wall(BaseWall):
         if (type(self), size, sin) not in self.images:
             self.create_image()
         else:
-            im, shadow, rect = self.images[(type(self), size, sin)]
+            im, shadow, rect, shadow_rect = self.images[(type(self), size, sin)]
             self.image = im
             if self.draw_shadow:
                 self.shadow = shadow
+                self.shadow_rect = pygame.Rect(shadow_rect)
+                self.shadow_rect.center = self.center
             self.rect = pygame.Rect(rect)
         self.rect.center = self.center

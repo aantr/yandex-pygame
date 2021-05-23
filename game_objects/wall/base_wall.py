@@ -6,7 +6,7 @@ from Box2D import *
 from game_objects.game_object import GameObject
 from utils.utils import b2_coords
 from utils.b2_factory import B2Factory
-from constants import *
+from configurations import *
 
 
 class BaseWall(GameObject):
@@ -61,7 +61,7 @@ class BaseWall(GameObject):
                 tuple(map(lambda x: int(x / 2), image.get_size()))), pos, width / 2)
         self.set_init_image(image)
         self.set_rotated_sprite(self.body, self.get_init_image())
-        self.images[(type(self), size, sin)] = self.image, self.shadow, self.rect
+        self.images[(type(self), size, sin)] = self.image, self.shadow, self.rect, self.shadow_rect
         self.rect.center = self.center
 
     def dispose(self):

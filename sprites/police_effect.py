@@ -1,6 +1,6 @@
 import pygame
 
-from constants import *
+from configurations import *
 from sprites.sprite import Sprite
 from utils.utils import bound
 

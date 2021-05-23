@@ -7,7 +7,7 @@ from Box2D import b2Vec2
 from game_objects.fireball import FireballExplosion
 from resources import Resources
 from utils.utils import b2_coords
-from constants import *
+from configurations import *
 from game_objects.car import Car
 from utils.utils import triangle_area
 from utils.ray_cast_callback import RayCastCallback, RayFixtureReport

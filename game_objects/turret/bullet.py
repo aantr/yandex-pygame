@@ -3,7 +3,7 @@ import math
 import pygame
 from Box2D import *
 
-from constants import *
+from configurations import *
 from game_objects.car import Car
 from game_objects.explosion import Explosion
 from game_objects.game_object import GameObject

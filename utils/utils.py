@@ -6,20 +6,25 @@ from PIL import Image
 def paint_images(images, pixel_func):
     res = []
     for im in images:
-        str_format = 'RGBA'
-        # image2pil
-        raw_str = pygame.image.tostring(im, str_format)
-        pil_im = Image.frombytes(str_format, im.get_size(), raw_str)
+        pil_im = image2pil(im)
         pix = pil_im.load()
         w, h = pil_im.size
         for i in range(w):
             for j in range(h):
                 pix[i, j] = pixel_func(pix[i, j])
-        # pil2image
-        raw_str = pil_im.tobytes('raw', str_format)
-        res.append(pygame.image.fromstring(
-            raw_str, pil_im.size, str_format).convert_alpha())
+        res.append(pil2image(pil_im))
     return res
+
+
+def pil2image(pil_im):
+    raw_str = pil_im.tobytes('raw', 'RGBA')
+    return pygame.image.fromstring(
+        raw_str, pil_im.size, 'RGBA').convert_alpha()
+
+
+def image2pil(im):
+    raw_str = pygame.image.tostring(im, 'RGBA')
+    return Image.frombytes('RGBA', im.get_size(), raw_str)
 
 
 def get_data(contact: b2Contact):
