@@ -37,7 +37,7 @@ class GameObject(Sprite):
         self.init_shadow = pygame.Surface((0, 0))
         self.shadow = self.init_shadow.copy()
         self.shadow_rect = self.rect.copy()
-        self.shadow_shift = pygame.Vector2(10, 10)
+        self.shadow_shift = pygame.Vector2(SHADOWS_SHIFT)
         # self.shadow_color = 135, 135, 135, 255
         if not hasattr(self, 'shadow_color'):
             self.shadow_color = SHADOWS_COLOR
@@ -107,6 +107,7 @@ class GameObject(Sprite):
         new = Image.new('RGBA', (pil_im.width + 2 * width, pil_im.height + 2 * width),
                         color=SECONDARY_SHADOWS_COLOR)
         new.paste(pil_im, (width, width))
-        new = new.filter(eval(f'ImageFilter.{SHADOWS_FILTER}'))
+        image_filter: ImageFilter = eval(f'ImageFilter.{SHADOWS_FILTER}')
+        new = new.filter(image_filter)
         res = pil2image(new)
         return res

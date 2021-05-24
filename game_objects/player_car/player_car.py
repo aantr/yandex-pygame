@@ -15,7 +15,7 @@ from game_objects.police import Police
 from game_objects.tire import Tire, C_LEFT, C_RIGHT, C_UP, C_DOWN
 from game_objects.wall.base_wall import BaseWall
 from sound_manager import SoundManager
-from utils.utils import b2_coords, get_data
+from utils.utils import b2_coords, get_data, paint_images
 from utils.utils import bound
 
 
@@ -32,17 +32,10 @@ class PlayerCar(Car):
         self.sm = sm
         self.camera = camera
 
-        max_forward_speed = 25
-        max_backward_speed = -12
-        max_drive_force = 30
-        max_lateral_impulse = 0.45
-        angular_friction_impulse = 0.3
-        linear_friction_impulse = 0.2
-
         self.set_characteristics(
-            max_forward_speed, max_backward_speed,
-            max_drive_force, max_lateral_impulse,
-            angular_friction_impulse, linear_friction_impulse)
+            MAX_FORWARD_SPEED, MAX_BACKWARD_SPEED,
+            MAX_DRIVE_FORCE, MAX_LATERAL_IMPULSE,
+            ANGULAR_FRICTION_IMPULSE, LINEAR_FRICTION_IMPULSE)
         for i in self.tires:
             i.ignore_ray_casting = True
 
@@ -57,6 +50,13 @@ class PlayerCar(Car):
         self.drifting_timeout = 0.65
         self.multiply_drifting = 0
         self.is_on_police_chase = False
+
+        # Highlighting shadow
+        self.highlight = False
+        self.highlight_timeout = 1
+        self.highlight_timer = 0
+        self.highlight_color = None
+        self.prev_init_shadow = self.init_shadow
 
         # Bank
         self.bank_timer = 0
@@ -82,8 +82,8 @@ class PlayerCar(Car):
         super().update(dt, events)
 
         # Всплывающие надписи
-        if len(self.queue_lines) >= 5:
-            self.queue_lines = self.queue_lines[-5:]
+        if len(self.queue_lines) >= 4:
+            self.queue_lines = self.queue_lines[-4:]
         if not self.lines_timer and self.queue_lines:
             PopupLine(self.world, self.cl, self.res,
                       self, self.queue_lines.pop(0), self.game_object_group)
@@ -105,6 +105,13 @@ class PlayerCar(Car):
         if self.drifting_timer >= self.drifting_timeout:
             self.drifting_timer = 0
             self.on_drift()
+        if self.highlight:
+            self.highlight_timer += dt
+            self.highlight_timer = bound(self.highlight_timer, 0, self.highlight_timeout)
+            if self.highlight_timer >= self.highlight_timeout:
+                self.highlight = False
+                self.highlight_timer = 0
+                self.init_shadow = self.prev_init_shadow
 
         # Spawn particles
         self.particles_timer += dt
@@ -145,6 +152,22 @@ class PlayerCar(Car):
                 self.queue_lines.append(self.bank_timeout_messages[self.bank_timeout_state])
                 self.bank_timeout_state += 1
 
+    def render(self):
+        super().render()
+        if self.highlight:
+            self.init_shadow = self.prev_init_shadow.copy()
+            k = 6  # Fade in less than fade out
+            state = self.highlight_timer / self.highlight_timeout * k
+            if state > 1:
+                state = (k - state) / (k - 1)
+            self.highlight_color.set_alpha(state * 255)
+            self.init_shadow.blit(self.highlight_color, (0, 0))
+
+    def highlight_shadow(self, color):
+        self.highlight = True
+        self.highlight_color = paint_images([self.init_shadow], lambda x: (*color[:3], x[3]))[0]
+        self.highlight_timer = 0
+
     def set_police_chase(self, value):
         self.is_on_police_chase = value
 
@@ -166,9 +189,9 @@ class PlayerCar(Car):
 
     def spawn_fireball(self, vector, damage_me=True, waste_energy=True, play_sound=True):
         if not waste_energy or self.waste_energy(0.03):
-            fb = Fireball(self.world, self.cl, self.res,
-                          self, vector, self.fireball_callback, self.game_object_group,
-                          damage_me=damage_me)
+            Fireball(self.world, self.cl, self.res,
+                     self, vector, self.fireball_callback, self.game_object_group,
+                     damage_me=damage_me)
             if play_sound:
                 self.sm.play(self.res.sound_lazer)
 
@@ -178,8 +201,8 @@ class PlayerCar(Car):
 
     def spawn_bomb(self):
         if self.waste_energy(0.1):
-            bomb = Bomb(self.world, self.cl, self.res, self,
-                        self.bomb_explosion_callback, self.game_object_group)
+            Bomb(self.world, self.cl, self.res, self,
+                 self.bomb_explosion_callback, self.game_object_group)
 
     def bomb_explosion_callback(self):
         self.camera.shake(0.6, 90)
@@ -201,36 +224,44 @@ class PlayerCar(Car):
         if self.is_on_police_chase:
             self.energy += self.drift_energy + 0.05 * self.multiply_drifting
             self.queue_lines.append(f'+ Энергия')
+            self.highlight_shadow((100, 0, 200, 255))
 
     def on_wall_collide(self):
         self.energy -= 0.05
         self.queue_lines.append('Стена')
+        self.highlight_shadow((200, 0, 0, 255))
 
     def on_police_collide(self):
         self.energy -= 0.1
         self.queue_lines.append('Полиция')
         self.bank_timer = 0
+        self.highlight_shadow((200, 0, 0, 255))
 
     def on_fireball_damage(self):
         # self.energy -= 0.1
         # self.queue_lines.append('Урон от фаерболла')
+        # self.highlight_shadow((200, 0, 0, 255))
         ...
 
     def on_bomb_damage(self):
         self.energy -= 0.2
         self.queue_lines.append('Урон от бомбы')
+        self.highlight_shadow((200, 0, 0, 255))
 
     def on_turret_damage(self):
         self.energy -= 0.1
         self.queue_lines.append('Урон от турели')
+        self.highlight_shadow((200, 0, 0, 255))
 
     def on_energy_collect(self):
         self.energy += self.item_energy
         self.queue_lines.append('+ Энерия')
+        self.highlight_shadow((100, 0, 200, 255))
 
     def waste_energy(self, energy):
         if energy >= self.energy:
             self.queue_lines.append('Недостаточно энергии')
+            self.highlight_shadow((200, 0, 0, 255))
             return False
         self.energy -= energy
         return True
@@ -238,6 +269,7 @@ class PlayerCar(Car):
     def on_police_break(self):
         self.queue_lines.append('+ 100 $')
         self.dollars += 100
+        self.highlight_shadow((0, 255, 0, 255))
 
     def begin_contact(self, contact: b2Contact):
         super().begin_contact(contact)
@@ -324,7 +356,7 @@ class PlayerCar(Car):
             for i in events:
                 if i.type == pygame.KEYDOWN:
                     if i.key == pygame.K_t:
-                        # self.teleport(150)
+                        self.highlight_shadow((255, 0, 128, 255))
                         ...
                     elif i.key == pygame.K_b:
                         self.spawn_bomb()

@@ -25,6 +25,5 @@ class DriftState(GameState):
         self.sm.player_car = self.car
         self.sm.set_background(self.res.music_bg_menu, 0.1)
 
-
     def update(self, dt, events):
         super().update(dt, events)
