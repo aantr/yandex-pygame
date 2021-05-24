@@ -356,7 +356,7 @@ class PlayerCar(Car):
             for i in events:
                 if i.type == pygame.KEYDOWN:
                     if i.key == pygame.K_t:
-                        self.highlight_shadow((255, 0, 128, 255))
+                        # self.highlight_shadow((255, 0, 128, 255))
                         ...
                     elif i.key == pygame.K_b:
                         self.spawn_bomb()
