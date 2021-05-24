@@ -37,7 +37,7 @@ ANGULAR_FRICTION_IMPULSE = 0.3
 LINEAR_FRICTION_IMPULSE = 0.2
 
 # Frames per second
-FPS = 70
+FPS = 90
 # FPS = 65
 # FPS = 55  # minimum
 # FPS = 80
