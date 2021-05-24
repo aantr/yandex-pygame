@@ -28,7 +28,7 @@ class Bank(GameObject):
         fd = B2Factory.create_fixture(shape)
         self.body = B2Factory.create_body(self.world, b2_staticBody, fd, b2_coords(center) / PPM)
         self.body.userData = self
-
+        self.set_rotated_sprite(self.body, self.image)
         LootArea(self.world, self.cl, center, self.game_object_group)
 
 

@@ -40,7 +40,7 @@ LINEAR_FRICTION_IMPULSE = 0.2
 FPS = 70
 # FPS = 65
 # FPS = 55  # minimum
-# FPS = 85
+# FPS = 80
 # FPS = 100  # For NASA computers only :)
 
 # # # Sounds # # #
