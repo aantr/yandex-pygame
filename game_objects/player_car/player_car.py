@@ -164,6 +164,8 @@ class PlayerCar(Car):
             self.init_shadow.blit(self.highlight_color, (0, 0))
 
     def highlight_shadow(self, color):
+        if not DRAW_SHADOWS:
+            return
         self.highlight = True
         self.highlight_color = paint_images([self.init_shadow], lambda x: (*color[:3], x[3]))[0]
         self.highlight_timer = 0
