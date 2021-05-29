@@ -20,7 +20,6 @@ from sprites.sprite import Group, Sprite
 
 from states.state import State
 from Box2D import *
-from configurations import *
 from utils.contact_listener import ContactListener
 
 try:
@@ -37,6 +36,11 @@ class GameState(State, Framework):
     def __init__(self, asm, res):
         super().__init__(asm, res)
 
+        self.button = None
+        self.sm = None
+        self.conversation = None
+        self.police_effect = None
+        self.minimap = None
         if BOX2D_DEBUG:
             Framework.__init__(self)
             self.load()
