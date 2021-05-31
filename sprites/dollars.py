@@ -13,8 +13,12 @@ class Dollars(Sprite):
         self.font = res.font36
         self.font20 = res.font20
         self.level = level
-
+        self.text_color = 0, 0, 0
         self.value = 0
+
+    def set_darkness_value(self, value):
+        v = value * 255
+        self.text_color = v, v, v
 
     def render(self):
         self.image.fill((0, 0, 0, 0))
@@ -22,6 +26,6 @@ class Dollars(Sprite):
         if self.level:
             shift = 0, 30
         self.image.blit(self.image_, (20 + shift[0], 20 + shift[1]))
-        self.image.blit(self.font.render(str(self.value), True, (0, 0, 0)), (125 + shift[0], 26 + shift[1]))
+        self.image.blit(self.font.render(str(self.value), True, self.text_color), (125 + shift[0], 26 + shift[1]))
         if self.level:
-            self.image.blit(self.font20.render('На этом уровне:', True, (0, 0, 0)), (20, 20))
+            self.image.blit(self.font20.render('На этом уровне:', True, self.text_color), (20, 20))

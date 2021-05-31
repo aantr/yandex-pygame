@@ -85,8 +85,8 @@ class Camera:
         surface_blit(spr.shadow, spr.shadow_rect.move(
             spr.shadow_shift - self.camera_shift))
 
-    def draw_sprite(self, spr, surface_blit, spritedict, dirty_append, init_rect):
-        shifted_rect = spr.rect.move(-1 * self.camera_shift)
+    def draw_sprite(self, spr: GameObject, surface_blit, spritedict, dirty_append, init_rect):
+        shifted_rect = spr.rect.move(-1 * self.camera_shift) if not spr.is_ui else spr.rect
         newrect = surface_blit(spr.image, shifted_rect)
         rec = spritedict[spr]
         if rec is init_rect:
@@ -120,7 +120,7 @@ class Camera:
                 self.draw_shadow(spr, surface_blit)
         # Draw sprite in bottom layer and move in opposite side
         for spr in self.group.get_sprites_from_layer(-1):
-            spr: Sprite
+            spr: GameObject
             self.draw_sprite(spr, surface_blit, spritedict,
                              dirty_append, init_rect)
         # Draw shadows
@@ -132,7 +132,7 @@ class Camera:
                 self.draw_shadow(spr, surface_blit)
         # Draw sprite and move in opposite side
         for spr in self.group.sprites():
-            spr: Sprite
+            spr: GameObject
             if spr.layer == -1:
                 continue
             self.draw_sprite(spr, surface_blit, spritedict,

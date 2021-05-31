@@ -11,7 +11,7 @@ class Main:
         if PLAY_SOUNDS:
             pygame.mixer.init(44100, -16, 2, 512)
         pygame.init()
-        pygame.mouse.set_system_cursor(SYSTEM_CURSOR_ARROW)
+        pygame.mouse.set_cursor(SYSTEM_CURSOR_ARROW)
         self.screen: pygame.Surface = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 

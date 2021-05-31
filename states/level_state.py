@@ -25,7 +25,7 @@ class LevelState(GameState):
         super().load()
 
         self.button = Button(self.res, (WIDTH - 120, HEIGHT - 70), 'Меню', self.sprite_group)
-        self.minimap = Minimap(200, 200, self.sprite_group)
+        self.minimap = Minimap(300, 240, self.sprite_group)
         self.conversation = Conversation(self.res, self.sprite_group)
         self.police_effect = PoliceEffect(self.sprite_group)
         self.energy_line = EnergyLine(self.res, self.sprite_group)
@@ -38,6 +38,7 @@ class LevelState(GameState):
 
     def update(self, dt, events):
         self.dollars.value = self.car.dollars
+        self.dollars.set_darkness_value(self.darkness.value)
 
         if self.is_over:
             self.over_timer += dt

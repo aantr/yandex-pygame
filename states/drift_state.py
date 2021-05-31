@@ -16,7 +16,7 @@ class DriftState(GameState):
         super().load()
 
         self.button = Button(self.res, (WIDTH - 120, HEIGHT - 70), 'Меню', self.sprite_group)
-        self.minimap = Minimap(200, 200, self.sprite_group)
+        self.minimap = Minimap(300, 240, self.sprite_group)
         self.conversation = Conversation(self.res, self.sprite_group)
         self.police_effect = PoliceEffect(self.sprite_group)
 
@@ -31,3 +31,4 @@ class DriftState(GameState):
 
     def update(self, dt, events):
         super().update(dt, events)
+        self.car.energy = 1

@@ -4,6 +4,7 @@ import svgelements
 
 from game_objects.bank import Bank
 from game_objects.conversation_barrier import ConversationBarrier
+from game_objects.darkness import Darkness
 from game_objects.energy_item import EnergyItem
 from game_objects.game_object import GameObject
 from game_objects.player_car.skin import CarSkin
@@ -32,7 +33,6 @@ BOX2D_DEBUG = 0
 
 
 class GameState(State, Framework):
-
     def __init__(self, asm, res):
         super().__init__(asm, res)
 
@@ -55,6 +55,9 @@ class GameState(State, Framework):
         # Аргументы при создании игрового объекта
         self.obj_args = self.world, self.contact_listener, self.res
 
+        # ############# Other sprites
+        self.sprite_group = Group()
+
         # ############# Игровые объекты
         self.camera_group = Group()
         self.camera = Camera(self.camera_group)
@@ -65,12 +68,11 @@ class GameState(State, Framework):
         self.grounds = Group()
         self.polices = Group()
         self.energy_items = Group()
-        self.bank = Group()
-        self.turret = Group()
-        self.car = None
+        self.turrets = Group()
 
-        # ############# Other sprites
-        self.sprite_group = Group()
+        self.darkness = None
+        self.car = None
+        self.bank = None
 
     def load_map(self, map_path):
         svg = svgelements.SVG.parse(map_path)
@@ -101,6 +103,8 @@ class GameState(State, Framework):
                 el: svgelements.Rect
                 self.add_rect(tuple(map(lambda x: x * scale_map,
                                         (el.x, el.y, el.width, el.height))), el)
+
+        self.darkness = Darkness(*self.obj_args, self.car, self.camera, self.camera_group)
 
     def add_line(self, p1, p2, el):
         if p1 == p2:
@@ -136,9 +140,12 @@ class GameState(State, Framework):
             EnergyItem(*self.obj_args, center, self.camera_group, self.energy_items)
         elif color == '#00ff00':
             if rect[2] == rect[3]:
-                Turret(*self.obj_args, center, self.camera_group, self.turret)
+                Turret(*self.obj_args, center, self.camera_group, self.turrets)
             else:
-                Bank(*self.obj_args, center, self.camera_group, self.bank)
+                if not self.bank:
+                    self.bank = Bank(*self.obj_args, center, self.camera_group)
+                else:
+                    raise MapError('2 банка на карте')
 
     def pause_event_listener(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
@@ -178,6 +185,7 @@ class GameState(State, Framework):
         self.world.Step(dt, 6, 2)
         self.camera.chase_sprite(self.car, dt, self.camera.get_camera_shift_car(self.car))
         self.camera.update(dt, events)
+        self.darkness.set_center()
 
         is_chasing = any([i.is_chasing for i in self.polices])
         self.car.set_police_chase(is_chasing)

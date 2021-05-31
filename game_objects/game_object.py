@@ -25,6 +25,7 @@ class GameObject(Sprite):
 
         self.ignore_ray_casting = False
         self.draw_shadow = bool(DRAW_SHADOWS)
+        self.is_ui = False
 
         # Box2D body collides
         if connects:

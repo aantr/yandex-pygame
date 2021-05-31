@@ -17,7 +17,7 @@ class Minimap(Sprite):
         self.rect = pygame.Rect(0, 0, width, height)
         self.rect.bottomleft = 0, HEIGHT
 
-        self.scale = 10
+        self.scale = 8
         self.shift = pygame.Vector2()
 
     def clear(self):
