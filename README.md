@@ -7,14 +7,16 @@
 У тебя есть запас энергии, который необходимо сохранить в процессе игры.
 Энергия теряется при столкновении, попадания пули и тд.
 Энергию можно пополнить, собирая предметы на уровне.
-## Установка
-1. Установите модули из файла requirements.txt (если не устанавливается box2d, попробуйте другую версию python (3.6.x 32bit))
-2. Клонируйте репозиторий
-3. Запустите файл main.py
+## Установка и запуск
+С помощью собранного main.exe
 <pre><code>git clone https://github.com/aantr/yandex-pygame
 cd yandex-pygame
-pip install -r requirements.txt
-python main.py
+dist\main.exe
+</code></pre>
+С помощью виртуального окружения
+<pre><code>git clone https://github.com/aantr/yandex-pygame
+cd yandex-pygame
+venv\Scripts\python.exe main.py
 </code></pre>
 ## Предупреждение
 Python очень медленный ЯП, поэтому вот что можно предпринять на слабых ПК для повышения FPS:
