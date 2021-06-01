@@ -1,3 +1,5 @@
+import os
+
 import pygame
 from pygame.constants import *
 from app_state_manager import AppStateManager
@@ -22,6 +24,7 @@ class Main:
                       self.res.image_car_green, self.res.image_police_car]
 
         # Игровой прогресс
+        self.save_file = os.path.join(Resources.get_application_path(), 'save.bin')
         self.completed_levels = 0
         self.dollars = 0
         self.saved_skins = [0] * len(self.skins)
@@ -35,7 +38,7 @@ class Main:
 
     def get_save(self):
         try:
-            with open('save.bin', 'br') as f:
+            with open(self.save_file, 'br') as f:
                 fields = list(map(lambda x: int.from_bytes(x, 'big'),
                                   f.read().strip().split(b'\n')))
                 self.completed_levels, \
@@ -49,7 +52,7 @@ class Main:
             self.get_save()
 
     def write_save(self):
-        with open('save.bin', 'bw') as f:
+        with open(self.save_file, 'bw') as f:
             fields = self.completed_levels, self.dollars, self.current_skin, *self.saved_skins
             for i in fields:
                 f.write(i.to_bytes(10, 'big') + b'\n')

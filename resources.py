@@ -1,4 +1,5 @@
 import os
+import sys
 
 import pygame
 
@@ -88,8 +89,26 @@ class Resources:
         return pygame.image.load(path).convert()
 
     @staticmethod
+    def get_application_path():
+        if getattr(sys, 'frozen', False):
+            application_path = os.path.dirname(sys.executable)
+        else:
+            application_path = os.path.dirname(__file__)
+        return application_path
+
+    @staticmethod
     def path(relative_path):
         if os.path.exists(relative_path):
             return relative_path
-        directory = os.path.split(__file__)[0]
-        return os.path.join(directory, relative_path)
+        directory = Resources.get_application_path()
+        path = os.path.join(directory, relative_path)
+        if os.path.exists(path):
+            return path
+        # Try get path link "redirect"
+        # This option need for built one-file and search the resources folder
+        if os.path.exists(os.path.join(directory, 'redirect')):
+            directory = os.path.join(directory, open('redirect', encoding='utf-8').read())
+            path = os.path.join(directory, relative_path)
+            if os.path.exists(path):
+                return path
+        raise FileNotFoundError(f'Path not found: "{relative_path}"')
