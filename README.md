@@ -8,15 +8,16 @@
 Энергия теряется при столкновении, попадания пули и тд.
 Энергию можно пополнить, собирая предметы на уровне.
 ## Установка и запуск
-С помощью собранного main.exe
+С помощью собранного main.exe (работает без установленного python)
 <pre><code>git clone https://github.com/aantr/yandex-pygame
 cd yandex-pygame
 dist\main.exe
 </code></pre>
-С помощью виртуального окружения
+С установленным Python и настройкой модулей
 <pre><code>git clone https://github.com/aantr/yandex-pygame
 cd yandex-pygame
-venv\Scripts\python.exe main.py
+pip install -r requirements.txt
+python main.py
 </code></pre>
 ## Предупреждение
 Python очень медленный ЯП, поэтому вот что можно предпринять на слабых ПК для повышения FPS:
