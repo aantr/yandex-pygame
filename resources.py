@@ -99,7 +99,7 @@ class Resources:
     @staticmethod
     def path(relative_path):
         if os.path.exists(relative_path):
-            return relative_path
+            return os.path.realpath(relative_path)
         directory = Resources.get_application_path()
         path = os.path.join(directory, relative_path)
         if os.path.exists(path):
@@ -111,4 +111,18 @@ class Resources:
             path = os.path.join(directory, relative_path)
             if os.path.exists(path):
                 return path
+        path = resource_path(relative_path.split('/'))
+        if os.path.exists(path):
+            return resource_path(path.replace('\\', '/'))
         raise FileNotFoundError(f'Path not found: "{relative_path}"')
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, *relative_path)
