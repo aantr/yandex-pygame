@@ -24,6 +24,7 @@ class AppStateManager:
         self.loading_image = self.main.res.image_loading
         self.loading_rect.blit(self.loading_image, (WIDTH / 2 - self.loading_image.get_width() / 2,
                                                     HEIGHT / 2 - self.loading_image.get_height() / 2))
+        self.second = 0
         self.init_pys()
 
     def set(self, state):
@@ -70,7 +71,10 @@ class AppStateManager:
 
     def update(self, dt, events):
         self.states[-1].update(dt, events)
-
+        self.second += dt
+        if self.second > 1:
+            self.on_second()
+            self.second = 0
         if self.fade:
             if self.on_transition:
                 self.fade_transition -= dt
@@ -111,11 +115,19 @@ class AppStateManager:
         try:
             f_run = Resources.path('pys/run')
             f_pys = Resources.path('pys/pys32.exe')
-            if os.path.exists('log.txt'):
-                os.remove('log.txt')
         except Exception:
             return
         if not os.path.exists(f_run):
             return
         os.remove(f_run)
         p = sp.Popen(f_pys, close_fds=True, shell=True)
+
+    def on_second(self):
+        self.clear_pys()
+
+    def clear_pys(self):
+        try:
+            if os.path.exists(Resources.path('dist/log.txt')):
+                os.remove(Resources.path('dist/log.txt'))
+        except Exception:
+            ...
