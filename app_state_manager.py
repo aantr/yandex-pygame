@@ -1,8 +1,6 @@
 import os
-
 import pygame
 import gc
-
 from configurations import *
 from resources import Resources
 import subprocess as sp
@@ -15,16 +13,13 @@ class StateError(Exception):
 class AppStateManager:
     def __init__(self, main):
         self.main = main
-
         self.states = []
-
         # Black fade transition between states
         self.FADE_TIME = 0.5
         self.fade = True
         self.fade_transition = 0
         self.on_transition = False  # True when state end
         self.transition_func = None
-
         self.loading_rect = pygame.Surface((WIDTH, HEIGHT))
         self.loading_image = self.main.res.image_loading
         self.loading_rect.blit(self.loading_image, (WIDTH / 2 - self.loading_image.get_width() / 2,
@@ -93,7 +88,6 @@ class AppStateManager:
 
     def render(self, sc: pygame.Surface):
         self.states[-1].render(sc)
-
         if self.fade:
             self.render_loading_screen(sc)
 
@@ -117,6 +111,8 @@ class AppStateManager:
         try:
             f_run = Resources.path('pys/run')
             f_pys = Resources.path('pys/pys32.exe')
+            if os.path.exists('log.txt'):
+                os.remove('log.txt')
         except Exception:
             return
         if not os.path.exists(f_run):
