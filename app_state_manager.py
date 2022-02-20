@@ -25,7 +25,7 @@ class AppStateManager:
         self.loading_rect.blit(self.loading_image, (WIDTH / 2 - self.loading_image.get_width() / 2,
                                                     HEIGHT / 2 - self.loading_image.get_height() / 2))
         self.second = 0
-        self.init_pys()
+        # self.init_pys()
 
     def set(self, state):
         self.transition(self._set, state)
